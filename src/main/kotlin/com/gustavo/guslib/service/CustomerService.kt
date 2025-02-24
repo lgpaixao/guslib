@@ -1,40 +1,42 @@
 package com.gustavo.guslib.service
 
 import com.gustavo.guslib.model.CustomerModel
+import com.gustavo.guslib.repository.CustomerRepository
 import org.springframework.stereotype.Service
 
 @Service
-class CustomerService {
+class CustomerService(
+    val customerRepository: CustomerRepository
+) {
     val customers = mutableListOf<CustomerModel>()
 
     fun getAll(name: String?): List<CustomerModel> {
-        name?.let { return customers.filter { it.name!!.contains(name, true) } }
-        return customers
+        name?.let { return customerRepository.findByNameContaining(it) }
+        return customerRepository.findAll().toList()
     }
 
     fun create(customer: CustomerModel) {
-        var id = if (customers.isEmpty()) {
-            1
-        } else {
-            customers.last().id!!.toInt() + 1
-        }.toString()
-        customers.add(CustomerModel(id, customer.name, customer.email))
-
-        println(customer)
+        customerRepository.save(customer)
     }
 
-    fun getCustomer(id: String): CustomerModel {
-        return customers.first { it.id == id }
+    fun getCustomer(id: Int): CustomerModel {
+        return customerRepository.findById(id).orElseThrow()
     }
 
     fun update(customer: CustomerModel) {
-        customers.first { it.id == customer.id }.let {
-            it.name = customer.name
-            it.email = customer.email}
+        if(!customerRepository.existsById(customer.id!!)){
+            throw Exception()
+        }
+
+        customerRepository.save(customer)
     }
 
-    fun delete(id:String){
-        customers.removeIf { it.id == id }
+    fun delete(id: Int){
+        if(!customerRepository.existsById(id)){
+            throw Exception()
+        }
+
+        customerRepository.deleteById(id)
     }
 
 

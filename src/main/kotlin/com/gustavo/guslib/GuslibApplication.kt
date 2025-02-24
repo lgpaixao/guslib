@@ -9,3 +9,6 @@ class GuslibApplication
 fun main(args: Array<String>) {
 	runApplication<GuslibApplication>(*args)
 }
+
+
+//TODO: Adicionar a criação automática do banco de dados caso não exista
