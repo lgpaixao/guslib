@@ -32,7 +32,7 @@ class CustomerController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: String, @RequestBody customer: PutCustomerRequest): CustomerModel {
+    fun update(@PathVariable id: String, @RequestBody customer: PutCustomerRequest) {
         return customerService.update(customer.toCustomerModel(id))
     }
 

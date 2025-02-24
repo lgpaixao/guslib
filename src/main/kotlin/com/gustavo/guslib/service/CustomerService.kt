@@ -18,7 +18,7 @@ class CustomerService {
         } else {
             customers.last().id!!.toInt() + 1
         }.toString()
-        customers.add(CustomerModel(id, customer.name, customer.name))
+        customers.add(CustomerModel(id, customer.name, customer.email))
 
         println(customer)
     }
@@ -30,7 +30,7 @@ class CustomerService {
     fun update(customer: CustomerModel) {
         customers.first { it.id == customer.id }.let {
             it.name = customer.name
-            it.email = customer.name}
+            it.email = customer.email}
     }
 
     fun delete(id:String){
