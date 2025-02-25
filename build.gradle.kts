@@ -42,6 +42,7 @@ tasks.withType<Test> {
 }
 
 flyway {
-	url = 'jdbc:h2:file:./target/foobar'
-	user = 'sa'
+	url = "jdbc:postgresql://0.0.0.0:2222/postgres"
+	user = "postgres"
+	password = "postgres"
 }

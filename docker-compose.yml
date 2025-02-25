@@ -1,9 +1,10 @@
 services:
-  db:
+  database:
     image: postgres
+    container_name: database
     restart: always
     environment:
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
