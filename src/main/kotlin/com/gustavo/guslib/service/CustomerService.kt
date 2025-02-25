@@ -1,15 +1,18 @@
 package com.gustavo.guslib.service
 
+import com.gustavo.guslib.enums.CustomerStatus
+import com.gustavo.guslib.enums.Errors
+import com.gustavo.guslib.exceptions.NotFoundException
 import com.gustavo.guslib.model.CustomerModel
 import com.gustavo.guslib.repository.CustomerRepository
 import org.springframework.stereotype.Service
+import kotlin.reflect.jvm.internal.impl.types.error.ErrorScope
 
 @Service
 class CustomerService(
-    val customerRepository: CustomerRepository
+    val customerRepository: CustomerRepository,
+    val bookService: BookService
 ) {
-    val customers = mutableListOf<CustomerModel>()
-
     fun getAll(name: String?): List<CustomerModel> {
         name?.let { return customerRepository.findByNameContaining(it) }
         return customerRepository.findAll().toList()
@@ -19,8 +22,8 @@ class CustomerService(
         customerRepository.save(customer)
     }
 
-    fun getById(id: Int): CustomerModel {
-        return customerRepository.findById(id).orElseThrow()
+    fun findById(id: Int): CustomerModel {
+        return customerRepository.findById(id).orElseThrow {NotFoundException(Errors.GL002.message.format(id), Errors.GL002.code)}
     }
 
     fun update(customer: CustomerModel) {
@@ -32,11 +35,9 @@ class CustomerService(
     }
 
     fun delete(id: Int){
-        if(!customerRepository.existsById(id)){
-            throw Exception()
-        }
-
-        customerRepository.deleteById(id)
+        val customer = findById(id)
+        customer.status = CustomerStatus.INATIVO
+        customerRepository.save(customer)
     }
 
 

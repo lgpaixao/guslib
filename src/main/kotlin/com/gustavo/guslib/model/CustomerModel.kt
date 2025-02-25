@@ -1,7 +1,10 @@
 package com.gustavo.guslib.model
 
+import com.gustavo.guslib.enums.CustomerStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -16,5 +19,9 @@ data class CustomerModel (
     var name: String,
 
     @Column
-    var email: String
+    var email: String,
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    var status: CustomerStatus
 )

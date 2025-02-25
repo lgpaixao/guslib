@@ -2,8 +2,9 @@ package com.gustavo.guslib.controller
 
 import com.gustavo.guslib.controller.request.PostCustomerRequest
 import com.gustavo.guslib.controller.request.PutCustomerRequest
+import com.gustavo.guslib.controller.response.CustomerResponse
 import com.gustavo.guslib.extension.toCustomerModel
-import com.gustavo.guslib.model.CustomerModel
+import com.gustavo.guslib.extension.toResponse
 import com.gustavo.guslib.service.CustomerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -15,8 +16,8 @@ class CustomerController(
 ) {
 
     @GetMapping
-    fun getAll(@RequestParam name: String?): List<CustomerModel> {
-        return customerService.getAll(name)
+    fun getAll(@RequestParam name: String?): List<CustomerResponse> {
+        return customerService.getAll(name).map { it.toResponse() }
     }
 
     @PostMapping
@@ -26,14 +27,15 @@ class CustomerController(
     }
 
     @GetMapping("/{id}")
-    fun getCustomer(@PathVariable id: Int): CustomerModel {
-        return customerService.getById(id)
+    fun getCustomer(@PathVariable id: Int): CustomerResponse {
+        return customerService.findById(id).toResponse()
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun update(@PathVariable id: Int, @RequestBody customer: PutCustomerRequest) {
-        return customerService.update(customer.toCustomerModel(id))
+        val customerSaved = customerService.findById(id)
+        return customerService.update(customer.toCustomerModel(customerSaved))
     }
 
     @DeleteMapping("/{id}")

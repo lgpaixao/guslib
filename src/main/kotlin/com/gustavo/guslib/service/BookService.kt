@@ -1,8 +1,13 @@
 package com.gustavo.guslib.service
 
 import com.gustavo.guslib.enums.BookStatus
+import com.gustavo.guslib.enums.Errors
+import com.gustavo.guslib.exceptions.NotFoundException
 import com.gustavo.guslib.model.BookModel
+import com.gustavo.guslib.model.CustomerModel
 import com.gustavo.guslib.repository.BookRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,20 +19,20 @@ class BookService (
 
 
     fun findById(id: Int): BookModel =
-        bookRepository.findById(id).orElseThrow()
+        bookRepository.findById(id).orElseThrow {NotFoundException(Errors.Gl001.message.format(id), Errors.Gl001.code)}
 
 
-    fun findAll(): List<BookModel> =
-        bookRepository.findAll().toList()
+    fun findAll(pageable: Pageable): Page<BookModel> =
+        bookRepository.findAll(pageable)
 
 
-    fun findActives(): List<BookModel> =
-        bookRepository.findByStatus(BookStatus.ATIVO)
+    fun findActives(pageable: Pageable): Page<BookModel> =
+        bookRepository.findByStatus(BookStatus.ATIVO, pageable)
 
     fun delete(id: Int) {
         val book = findById(id)
 
-        book.status = BookStatus.CANCELADO
+        book.status = BookStatus.DELETADO
 
         update(book)
     }
@@ -35,6 +40,13 @@ class BookService (
     fun update(book: BookModel): BookModel {
         return bookRepository.save(book)
     }
+
+    fun deleteByCustomer(customer: CustomerModel) {
+        val books = bookRepository.findByCustomer(customer)
+        for (book in books) {book.status = BookStatus.DELETADO}
+        bookRepository.saveAll(books)
+    }
+
 
 
 }

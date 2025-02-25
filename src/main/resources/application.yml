@@ -19,6 +19,9 @@ spring:
     sql-migration-separator: __
     sql-migration-suffixes: .sql
 
+  jackson:
+    default-property-inclusion: non-null
+
 logging:
   level:
     org.flywaydb: DEBUG

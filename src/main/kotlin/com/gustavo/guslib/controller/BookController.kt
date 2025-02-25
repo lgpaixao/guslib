@@ -2,10 +2,14 @@ package com.gustavo.guslib.controller
 
 import com.gustavo.guslib.controller.request.PostBookRequest
 import com.gustavo.guslib.controller.request.PutBookRequest
+import com.gustavo.guslib.controller.response.BookResponse
 import com.gustavo.guslib.extension.toBookModel
-import com.gustavo.guslib.model.BookModel
+import com.gustavo.guslib.extension.toResponse
 import com.gustavo.guslib.service.BookService
 import com.gustavo.guslib.service.CustomerService
+import org.springframework.data.domain.Page
+import org.springframework.data.web.PageableDefault
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
-import java.awt.print.Book
 
 @RestController
 @RequestMapping("/book")
@@ -25,28 +28,26 @@ class BookController (
     val bookService: BookService
 ){
 
-
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody request: PostBookRequest){
-        val customer = customerService.getById(request.customerId)
+        val customer = customerService.findById(request.customerId)
         bookService.create(request.toBookModel(customer))
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Int): BookModel {
-        return bookService.findById(id)
+    fun getById(@PathVariable id: Int): BookResponse {
+        return bookService.findById(id).toResponse()
     }
 
     @GetMapping
-    fun findAll(): List<BookModel>{
-        return bookService.findAll()
+    fun findAll(@PageableDefault(page = 0, size=10) pageable: Pageable): Page<BookResponse> {
+        return bookService.findAll(pageable).map{it.toResponse()}
     }
 
     @GetMapping("/active")
-    fun findActives(): List<BookModel>{
-        return bookService.findActives()
+    fun findActives(@PageableDefault(page = 0, size=10) pageable: Pageable): Page<BookResponse> {
+        return bookService.findActives(pageable).map{it.toResponse()}
     }
 
     @DeleteMapping("/{id}")
@@ -57,8 +58,8 @@ class BookController (
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody book: PutBookRequest): BookModel {
+    fun update(@PathVariable id: Int, @RequestBody book: PutBookRequest): BookResponse {
         val bookSaved = bookService.findById(id)
-        return bookService.update(book.toBookModel(bookSaved))
+        return bookService.update(book.toBookModel(bookSaved)).toResponse()
     }
 }
