@@ -19,7 +19,7 @@ class BookService (
 
 
     fun findById(id: Int): BookModel =
-        bookRepository.findById(id).orElseThrow {NotFoundException(Errors.Gl001.message.format(id), Errors.Gl001.code)}
+        bookRepository.findById(id).orElseThrow {NotFoundException(Errors.Gl101.message.format(id), Errors.Gl101.code)}
 
 
     fun findAll(pageable: Pageable): Page<BookModel> =

@@ -6,7 +6,6 @@ import com.gustavo.guslib.exceptions.NotFoundException
 import com.gustavo.guslib.model.CustomerModel
 import com.gustavo.guslib.repository.CustomerRepository
 import org.springframework.stereotype.Service
-import kotlin.reflect.jvm.internal.impl.types.error.ErrorScope
 
 @Service
 class CustomerService(
@@ -23,7 +22,7 @@ class CustomerService(
     }
 
     fun findById(id: Int): CustomerModel {
-        return customerRepository.findById(id).orElseThrow {NotFoundException(Errors.GL002.message.format(id), Errors.GL002.code)}
+        return customerRepository.findById(id).orElseThrow {NotFoundException(Errors.GL201.message.format(id), Errors.GL201.code)}
     }
 
     fun update(customer: CustomerModel) {
