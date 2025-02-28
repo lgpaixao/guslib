@@ -6,6 +6,7 @@ import com.gustavo.guslib.controller.response.CustomerResponse
 import com.gustavo.guslib.extension.toCustomerModel
 import com.gustavo.guslib.extension.toResponse
 import com.gustavo.guslib.service.CustomerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -22,7 +23,7 @@ class CustomerController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody customer: PostCustomerRequest) {
+    fun create(@RequestBody @Valid customer: PostCustomerRequest) {
         customerService.create(customer.toCustomerModel())
     }
 
@@ -33,7 +34,7 @@ class CustomerController(
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun update(@PathVariable id: Int, @RequestBody customer: PutCustomerRequest) {
+    fun update(@PathVariable id: Int, @RequestBody @Valid customer: PutCustomerRequest) {
         val customerSaved = customerService.findById(id)
         return customerService.update(customer.toCustomerModel(customerSaved))
     }
