@@ -7,6 +7,7 @@ import com.gustavo.guslib.extension.toBookModel
 import com.gustavo.guslib.extension.toResponse
 import com.gustavo.guslib.service.BookService
 import com.gustavo.guslib.service.CustomerService
+import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.web.PageableDefault

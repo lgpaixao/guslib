@@ -1,6 +1,14 @@
 package com.gustavo.guslib.validation
 
-import java.lang.classfile.Annotation
+import jakarta.validation.Constraint
+import jakarta.validation.Payload
+import kotlin.reflect.KClass
 
-@Target(AnnotationTarget.FIELD.FIELD)
-annotation class EmaillAvailable()
+@Constraint(validatedBy = [EmaillAvailableValidator::class])
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FIELD)
+annotation class EmaillAvailable(
+    val message: String = "Email já cadastrado",
+    val groups: Array<KClass<*>> = [],
+    val payload: Array<KClass<out Payload>> = []
+)
