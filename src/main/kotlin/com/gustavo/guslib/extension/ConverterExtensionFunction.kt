@@ -11,14 +11,26 @@ import com.gustavo.guslib.enums.CustomerStatus
 import com.gustavo.guslib.model.BookModel
 import com.gustavo.guslib.model.CustomerModel
 
-fun PostCustomerRequest.toCustomerModel(): CustomerModel{
-    return CustomerModel(name = this.name, email=this.email, status= CustomerStatus.ATIVO)
+fun PostCustomerRequest.toCustomerModel(): CustomerModel {
+    return CustomerModel(
+        name = this.name,
+        email = this.email,
+        status = CustomerStatus.ATIVO,
+        password = this.password
+    )
 }
 
-fun PutCustomerRequest.toCustomerModel(previousValue: CustomerModel): CustomerModel{
-    return CustomerModel(id = previousValue.id, name = this.name, email=this.email, status = CustomerStatus.ATIVO)
+fun PutCustomerRequest.toCustomerModel(previousValue: CustomerModel): CustomerModel {
+    return CustomerModel(
+        id = previousValue.id,
+        name = this.name,
+        email = this.email,
+        status = CustomerStatus.ATIVO,
+        password = previousValue.password
+    )
 }
-fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel{
+
+fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel {
     return BookModel(
         name = this.name,
         price = this.price,
@@ -27,7 +39,7 @@ fun PostBookRequest.toBookModel(customer: CustomerModel): BookModel{
     )
 }
 
-fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
+fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel {
     return BookModel(
         id = previousValue.id,
         name = this.name ?: previousValue.name,
@@ -38,10 +50,12 @@ fun PutBookRequest.toBookModel(previousValue: BookModel): BookModel{
 }
 
 fun CustomerModel.toResponse(): CustomerResponse {
-    return CustomerResponse(id = this.id,
+    return CustomerResponse(
+        id = this.id,
         name = this.name,
         email = this.email,
-        status = this.status)
+        status = this.status
+    )
 }
 
 fun BookModel.toResponse(): BookResponse {
@@ -50,5 +64,6 @@ fun BookModel.toResponse(): BookResponse {
         name = this.name,
         price = this.price,
         status = this.status,
-        customer = this.customer)
+        customer = this.customer
+    )
 }

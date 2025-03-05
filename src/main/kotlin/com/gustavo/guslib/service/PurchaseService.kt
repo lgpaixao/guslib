@@ -18,7 +18,7 @@ class PurchaseService(
 
         purchaseModel.books.map{
             if (!bookService.isActive(it)){
-                throw BookNotAvailableException(Errors.GL301.message.format(it.id), Errors.GL301.code)
+                throw BookNotAvailableException(Errors.GL301.message, Errors.GL301.code)
             }
         }
 

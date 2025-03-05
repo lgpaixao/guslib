@@ -1,13 +1,8 @@
 package com.gustavo.guslib.model
 
 import com.gustavo.guslib.enums.CustomerStatus
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import com.gustavo.guslib.enums.Profile
+import jakarta.persistence.*
 
 @Entity(name = "customer")
 data class CustomerModel (
@@ -23,5 +18,14 @@ data class CustomerModel (
 
     @Column
     @Enumerated(EnumType.STRING)
-    var status: CustomerStatus
+    var status: CustomerStatus,
+
+    @Column
+    val password: String,
+
+    @CollectionTable(name = "customer_roles", joinColumns = [JoinColumn(name = "customer_id")])
+    @ElementCollection(targetClass = Profile::class, fetch = FetchType.EAGER)
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    var roles: Set<Profile> = setOf()
 )
