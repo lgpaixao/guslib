@@ -9,6 +9,7 @@ import com.gustavo.guslib.repository.BookRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.awt.print.Book
 
 @Service
 class BookService (
@@ -49,6 +50,22 @@ class BookService (
 
     fun findAllByIds(bookIds: Set<Int>): List<BookModel> {
         return bookRepository.findAllById(bookIds).toList()
+    }
+
+    fun purchase(books: MutableList<BookModel>) {
+        books.map {
+            it.status = BookStatus.VENDIDO
+        }
+        bookRepository.saveAll(books)
+    }
+
+    fun isActive(book: BookModel): Boolean {
+
+        if (book.status == BookStatus.ATIVO){
+            return true
+        }
+
+        return false
     }
 
 
