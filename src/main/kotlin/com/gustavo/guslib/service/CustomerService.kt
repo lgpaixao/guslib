@@ -2,7 +2,7 @@ package com.gustavo.guslib.service
 
 import com.gustavo.guslib.enums.CustomerStatus
 import com.gustavo.guslib.enums.Errors
-import com.gustavo.guslib.enums.Profile
+import com.gustavo.guslib.enums.Roles
 import com.gustavo.guslib.exceptions.NotFoundException
 import com.gustavo.guslib.model.CustomerModel
 import com.gustavo.guslib.repository.CustomerRepository
@@ -22,7 +22,7 @@ class CustomerService(
 
     fun create(customer: CustomerModel) {
         val customerCopy = customer.copy(
-            roles = setOf(Profile.CUSTOMER),
+            roles = setOf(Roles.CUSTOMER),
             password = bCryptPasswordEncoder.encode(customer.password)
         )
         customerRepository.save(customerCopy)

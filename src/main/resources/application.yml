@@ -31,3 +31,7 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+jwt:
+  secret: ed64e614-8709-48b2-bda2-fee2a9204030
+  expiration: 999999
