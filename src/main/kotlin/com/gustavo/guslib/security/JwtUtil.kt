@@ -1,6 +1,9 @@
 package com.gustavo.guslib.security
 
+import com.gustavo.guslib.exceptions.AuthenticationException
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -26,5 +29,31 @@ class JwtUtil {
             .expiration(expirationTime)
             .signWith(secretKey)
             .compact()
+    }
+
+    fun isValid(token: String): Boolean {
+        val claims = getClaims(token)
+        if(claims.subject == null || claims.expiration == null || Date().after(claims.expiration)){
+            return false
+        } else {
+            return true
+        }
+    }
+
+    private fun getClaims(token: String): Claims {
+        try {
+            val secretKey: SecretKey = Keys.hmacShaKeyFor(secret!!.toByteArray())
+            return Jwts.parser()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .body
+        } catch (ex: Exception) {
+            throw AuthenticationException("Token Invalido", "999")
+        }
+    }
+
+    fun getSubject(token: String): String? {
+        return getClaims(token).subject
     }
 }

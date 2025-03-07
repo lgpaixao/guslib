@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import com.gustavo.guslib.security.AuthorizationFilter
 
 @Configuration
 @EnableWebSecurity
@@ -42,7 +43,20 @@ class SecurityConfig(
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
 
-        http.addFilter(AuthenticationFilter(authenticationManager, customerRepository, jwtUtil))
+        http.addFilter(
+            AuthenticationFilter(
+                authenticationManager,
+                customerRepository,
+                jwtUtil
+            )
+        )
+        http.addFilter(
+            AuthorizationFilter(
+                authenticationManager,
+                jwtUtil,
+                userDetails
+            )
+        )
 
         return http.build()
     }
