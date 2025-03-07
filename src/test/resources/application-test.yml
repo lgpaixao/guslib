@@ -3,8 +3,13 @@ server:
 
 spring:
 
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:2222/postgrestest
+    username: postgres
+    password: postgres
+
   profiles:
-    active: dev
+    active: test
 
   jpa:
     hibernate:

@@ -1,5 +1,7 @@
 package com.gustavo.guslib.controller
 
+import com.gustavo.guslib.config.OnlyAdminResource
+import com.gustavo.guslib.config.UserCanOnlyAcessTheirOwnResources
 import com.gustavo.guslib.controller.request.PostCustomerRequest
 import com.gustavo.guslib.controller.request.PutCustomerRequest
 import com.gustavo.guslib.controller.response.CustomerResponse
@@ -8,15 +10,17 @@ import com.gustavo.guslib.extension.toResponse
 import com.gustavo.guslib.service.CustomerService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("customers")
 class CustomerController(
-    val customerService: CustomerService
+    private val customerService: CustomerService
 ) {
 
     @GetMapping
+    @OnlyAdminResource
     fun getAll(@RequestParam name: String?): List<CustomerResponse> {
         return customerService.getAll(name).map { it.toResponse() }
     }
@@ -28,6 +32,7 @@ class CustomerController(
     }
 
     @GetMapping("/{id}")
+    @UserCanOnlyAcessTheirOwnResources
     fun getCustomer(@PathVariable id: Int): CustomerResponse {
         return customerService.findById(id).toResponse()
     }

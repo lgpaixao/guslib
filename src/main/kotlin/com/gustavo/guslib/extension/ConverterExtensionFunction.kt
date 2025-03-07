@@ -6,10 +6,12 @@ import com.gustavo.guslib.controller.request.PutBookRequest
 import com.gustavo.guslib.controller.request.PutCustomerRequest
 import com.gustavo.guslib.controller.response.BookResponse
 import com.gustavo.guslib.controller.response.CustomerResponse
+import com.gustavo.guslib.controller.response.PageResponse
 import com.gustavo.guslib.enums.BookStatus
 import com.gustavo.guslib.enums.CustomerStatus
 import com.gustavo.guslib.model.BookModel
 import com.gustavo.guslib.model.CustomerModel
+import org.springframework.data.domain.Page
 
 fun PostCustomerRequest.toCustomerModel(): CustomerModel {
     return CustomerModel(
@@ -66,4 +68,9 @@ fun BookModel.toResponse(): BookResponse {
         status = this.status,
         customer = this.customer
     )
+}
+
+fun <T> Page<T>.toPageResponse(): PageResponse<T> {
+    return PageResponse(this.content, this.number, this.totalElements, this.totalPages)
+
 }

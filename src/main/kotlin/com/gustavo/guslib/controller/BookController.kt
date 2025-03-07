@@ -3,7 +3,9 @@ package com.gustavo.guslib.controller
 import com.gustavo.guslib.controller.request.PostBookRequest
 import com.gustavo.guslib.controller.request.PutBookRequest
 import com.gustavo.guslib.controller.response.BookResponse
+import com.gustavo.guslib.controller.response.PageResponse
 import com.gustavo.guslib.extension.toBookModel
+import com.gustavo.guslib.extension.toPageResponse
 import com.gustavo.guslib.extension.toResponse
 import com.gustavo.guslib.service.BookService
 import com.gustavo.guslib.service.CustomerService
@@ -24,10 +26,10 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 class BookController (
-    val customerService: CustomerService,
-    val bookService: BookService
+    private val customerService: CustomerService,
+    private val bookService: BookService
 ){
 
     @PostMapping
@@ -43,8 +45,8 @@ class BookController (
     }
 
     @GetMapping
-    fun findAll(@PageableDefault(page = 0, size=10) pageable: Pageable): Page<BookResponse> {
-        return bookService.findAll(pageable).map{it.toResponse()}
+    fun findAll(@PageableDefault(page = 0, size=10) pageable: Pageable): PageResponse<BookResponse> {
+        return bookService.findAll(pageable).map{it.toResponse()}.toPageResponse()
     }
 
     @GetMapping("/active")

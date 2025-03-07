@@ -34,7 +34,7 @@ class CustomerService(
 
     fun update(customer: CustomerModel) {
         if(!customerRepository.existsById(customer.id!!)){
-            throw Exception()
+            throw NotFoundException(Errors.GL201.message.format(customer.id), Errors.GL201.code)
         }
 
         customerRepository.save(customer)
@@ -44,6 +44,7 @@ class CustomerService(
         val customer = findById(id)
         customer.status = CustomerStatus.INATIVO
         customerRepository.save(customer)
+        bookService.deleteByCustomer(customer)
     }
 
     fun emailAvailable(email: String): Boolean {

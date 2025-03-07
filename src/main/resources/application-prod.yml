@@ -2,13 +2,10 @@ server:
   port: 8081
 
 spring:
-
-  profiles:
-    active: dev
-
-  jpa:
-    hibernate:
-      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:2222/postgresprod
+    username: postgres
+    password: postgres
 
   flyway:
     enabled: true

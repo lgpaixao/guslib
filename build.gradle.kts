@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.jetbrains.kotlin.plugin.jpa") version "2.1.20-RC"
 	id("org.flywaydb.flyway") version "11.3.3"
+	jacoco
 }
 
 group = "com.gustavo"
@@ -32,6 +33,7 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt:0.12.6")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation ("io.mockk:mockk:1.13.7")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	runtimeOnly("org.postgresql:postgresql")
 }
@@ -50,4 +52,11 @@ flyway {
 	url = "jdbc:postgresql://0.0.0.0:2222/postgres"
 	user = "postgres"
 	password = "postgres"
+}
+
+tasks.test {
+	finalizedBy(tasks.jacocoTestReport)
+}
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
 }

@@ -1,0 +1,10 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://0.0.0.0:2222/postgres
+    username: postgres
+    password: postgres
+
+jwt:
+  secret: ed64e614-8709-48b2-bda2-fee2a9204030
+  expiration: 999999
